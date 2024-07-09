@@ -5,7 +5,18 @@ import random
 from time import sleep
 
 
+BLOCK_URLS = [
+    'pagead',
+    'doubleclick.net',
+    'https://www.youtube.com/pagead/interaction',
+]
 
+def interceptor(request):
+    for block_url in BLOCK_URLS:
+        if block_url in request:
+            print(f'blockurl:{BLOCK_URLS}')
+            request.abort()
+print(f'interceptor:{interceptor}')
 
 # user_agent random設定
 def get_random_user_agent():
@@ -33,9 +44,10 @@ service = Service(
 options = Options()
 options.add_argument('--headless')
 options.add_argument(f'user-agent={get_random_user_agent()}')
-options.add_argument('--load-extension=C:\\Users\\user\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 4\\Extensions\\cfhdojbkjhnklbpkdaibdccddilifddb')
+# options.add_argument('--load-extension=C:\\Users\\user\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 4\\Extensions\\cfhdojbkjhnklbpkdaibdccddilifddb')
 
 driver = webdriver.Chrome(service=service, options=options)
+driver.request_interceptor = interceptor
 
 driver.get('https://www.google.com/search?q=youtube&oq=&gs_lcrp=EgZjaHJvbWUqCQgAEEUYOxjCAzIJCAAQRRg7GMIDMgkIARBFGDsYwgMyCQgCEEUYOxjCAzIJCAMQRRg7GMIDMgkIBBBFGDsYwgMyCQgFEEUYOxjCAzIJCAYQRRg7GMIDMgkIBxBFGDsYwgPSAQoyNjk4ODFqMGoxqAIIsAIB&sourceid=chrome&ie=UTF-8')
 
@@ -55,6 +67,7 @@ options_1.add_argument(f'user-agent={get_random_user_agent()}')
 options_1.add_argument('--load-extension=C:\\Users\\user\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 4\\Extensions\\cfhdojbkjhnklbpkdaibdccddilifddb')
 
 driver_1 = webdriver.Chrome(service=service, options=options_1)
+driver_1.request_interceptor = interceptor
 cookes_second = driver_1.get_cookies() # delete_all_cookies()を行って 確認したら[]になっていた。つまりクッキー情報は、削除されてる。
 
 
