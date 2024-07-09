@@ -1,11 +1,13 @@
 import requests 
 from urllib.parse import urlparse 
 
-blocked_domains = ['www.youtube.com']
+blocked_domains = ['www.youtube.com','googleads.g.doubleclick.net']
+
 
 def should_block(url):
     parse_url = urlparse(url)
     domain = parse_url.netloc
+    print('domain:', domain)
     for blocked_domain in blocked_domains:
         if blocked_domain in domain:
             return True 
@@ -21,4 +23,4 @@ def make_request(url):
 
 
 make_request('https://www.twitch.tv/')
-make_request('https://www.youtube.com/?app=desktop&hl=ja')
+make_request('https://googleads.g.doubleclick.net/pagead/id')
