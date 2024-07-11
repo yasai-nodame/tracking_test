@@ -59,3 +59,9 @@ sleep(300)
 
 
 # user_agentを消して、request_inseptorだけでブロックされるか試してみる。
+
+
+# selenium_wireによって webdriverのinterceptorで広告をブロックできたが、ブロックというよりは err:net faild302みたいな
+# おそらく、httpヘッダーにCORSがないため、同一オリジンじゃない広告を取得するのに失敗してる気がする。
+# その理由が、リクエストされる前にinterceptorすることによって、エラーを引き起こしてるんじゃないかと推測してます。
+# ここらへんは試していかないとわからない。
