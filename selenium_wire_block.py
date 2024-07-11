@@ -9,6 +9,11 @@ import random
 BLOCK_URLS = [
     'googleads.g.doubleclick.net/pagead/',
     'www.youtube.com/pagead/interaction',
+    'https://www.google.com/pagead/lvz',
+    'https://www.google.co.jp/pagead/lvz',
+    'https://static.doubleclick.net/instream',
+    'https://tpc.googlesyndication.com/soder',
+    
 ]
 
 # リクエストをインターセプトする
@@ -17,6 +22,8 @@ def interceptor(request):
         if block_url in request.url:
             print(f'ブロッキングURL: {request.url}')
             request.abort()
+        else:
+            print(f'リクエストURL: {request.url}')
             
 
 # ランダムなユーザーエージェントを取得する
@@ -48,7 +55,7 @@ driver.request_interceptor = interceptor
 
 driver.get('https://www.youtube.com/?app=desktop&hl=ja')
 
-sleep(90)
+sleep(300)
 
 
 # user_agentを消して、request_inseptorだけでブロックされるか試してみる。
