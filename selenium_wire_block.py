@@ -13,6 +13,11 @@ BLOCK_URLS = [
     'https://www.google.co.jp/pagead/lvz',
     'https://static.doubleclick.net/instream',
     'https://tpc.googlesyndication.com/soder',
+    'https://www.youtube.com/pagead/1p-user-list',
+    'https://www.google.co.jp/pagead/1p-user-list',
+    'https://googleads.g.doubleclick.net/pagead/viewthroughconversion'
+    
+    
     
 ]
 
@@ -21,6 +26,7 @@ def interceptor(request):
     for block_url in BLOCK_URLS:
         if block_url in request.url:
             print(f'ブロッキングURL: {request.url}')
+            request.headers['Origin'] = 'https://www.google.co.jp/'
             request.abort()
         else:
             print(f'リクエストURL: {request.url}')
@@ -53,7 +59,7 @@ options.add_argument(f'user-agent={get_random_user_agent()}')
 driver = webdriver.Chrome(service=service, options=options)
 driver.request_interceptor = interceptor
 
-driver.get('https://www.youtube.com/?app=desktop&hl=ja')
+driver.get('https://www.google.co.jp/')
 
 sleep(300)
 
@@ -62,7 +68,5 @@ sleep(300)
 
 
 # selenium_wireによって webdriverのinterceptorで広告をブロックできたが、ブロックというよりは err:net faild302みたいな
-# おそらく、httpヘッダーにCORSがないため、同一オリジンじゃない広告を取得するのに失敗してる気がする。
-# その理由が、リクエストされる前にinterceptorすることによって、エラーを引き起こしてるんじゃないかと推測してます。
-# ここらへんは試していかないとわからない。
-# まず試す
+# これはあくまで　ブラウザとリダイレクト先の広告取得ページ間で起きてるCORSエラーにすぎなかった。　
+# CORSを設定しなかった結果のエラーにすぎない。
